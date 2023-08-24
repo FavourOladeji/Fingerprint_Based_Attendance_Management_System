@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@push('scripts')
+    @include('admin.components.flash')
+@endpush('scripts')
 @section('content')
     <div class="content ">
         <div class="page-header d-md-flex justify-content-between">
@@ -121,3 +124,7 @@
 
     </div>
 @endsection
+
+{{-- @push('scripts')
+    @include('admin.components.flash')
+@endpush --}}
