@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Enums\UserType;
-use App\Helpers\Toastr;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\RedirectResponse;
@@ -20,8 +19,7 @@ class CheckIfAdmin
     public function handle(Request $request, Closure $next): Response | RedirectResponse
     {
         if ($request->user()->user_type !== UserType::Admin) {
-            $toastr = new Toastr;
-            $toastr->warning('You are currently not authorized');
+            toastr()->warning('You are currently not authorized');
             return redirect(RouteServiceProvider::HOME);
         }
         return $next($request);

@@ -25,6 +25,9 @@
     <!-- App css -->
     <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}" type="text/css">
 
+    <!-- Additional Styling -->
+    @yield('styles')
+
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -140,11 +143,22 @@
                 <div class="navigation-menu-body">
                     <ul>
                         <li>
-                            <a class="active" href=index.html>
+                            <a class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                                href={{ route('dashboard') }}>
                                 <span class="nav-link-icon">
                                     <i data-feather="pie-chart"></i>
                                 </span>
                                 <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="{{ request()->routeIs('timetable') || request()->routeIs('timetable.*') ? 'active' : '' }}"
+                                href="{{ route('timetable.index') }}">
+                                <span class="nav-link-icon">
+                                    <i data-feather="clock"></i>
+                                </span>
+                                <span>Timetable</span>
                             </a>
                         </li>
 
@@ -182,7 +196,9 @@
             <!-- Content body -->
             <div class="content-body">
                 <!-- Content -->
-                @yield('content')
+                <div class="content ">
+                    @yield('content')
+                </div>
                 <!-- ./ Content -->
 
                 <!-- Footer -->
