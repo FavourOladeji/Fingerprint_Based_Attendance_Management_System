@@ -9,16 +9,38 @@
     <div class="page-header d-md-flex justify-content-between">
         <div class="">
 
-            <h3>Schedule for the Week</h3>
+            <h3>View the Attendance for the Week</h3>
 
         </div>
         <div class="mt-3 mt-md-0">
-            @if ($canEdit)
-                <a href="{{ route('timetable.create') }}"
-                    class="btn btn-outline-secondary btn-uppercase ml-0 ml-md-2 mt-2 mt-md-0">
-                    <i class="ti-pencil mr-2"></i> Edit Schedule
-                </a>
-            @endif
+            <form action="{{ route('attendance.index') }}" method="GET">
+                <div class="form-row">
+                    <div class="form-group">
+                        <select name="timeframe" class="form-control">
+                            @foreach ($timeframes as $timeframe)
+                                @if ($loop->first)
+                                    <option value="{{ $timeframe['from'] }}" selected>
+                                        {{ $timeframe['from']->format('M d, Y') }} to
+                                        {{ $timeframe['to']->format('M d, Y') }}</option>
+                                @else
+                                    <option value="{{ $timeframe['from'] }}"
+                                        {{ request()->timeframe == $timeframe['from'] ? 'selected' : '' }}>
+                                        {{ $timeframe['from']->format('M d, Y') }} to
+                                        {{ $timeframe['to']->format('M d, Y') }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary ml-0 ml-md-2 mt-2 mt-md-0">Filter</button>
+                        <a href="{{ route('attendance.index') }}"
+                            class="btn btn-secondary ml-0 ml-md-2 mt-2 mt-md-0">Reset</a>
+                    </div>
+                    {{-- <div id="dashboard-daterangepicker" class="btn btn-outline-light">
+                        <span></span>
+                    </div> --}}
+                </div>
+            </form>
         </div>
 
     </div>

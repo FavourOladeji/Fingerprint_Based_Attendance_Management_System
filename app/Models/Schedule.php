@@ -11,7 +11,7 @@ class Schedule extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public static $days = ['Monday', 'Tudesday', 'Wednesday', 'Thursday', 'Friday'];
+    public static $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
     protected $fillable = [
         'time',

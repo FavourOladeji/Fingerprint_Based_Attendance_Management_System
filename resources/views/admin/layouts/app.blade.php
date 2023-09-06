@@ -35,7 +35,7 @@
     <![endif]-->
 </head>
 
-<body class="horizontal-navigation">
+<body class="">
     <!-- Preloader -->
     <div class="preloader">
         <div class="preloader-icon"></div>
@@ -72,8 +72,9 @@
 
                     <div class="header-logo">
                         <a href=index.html>
-                            <img class="logo" src="{{ asset('assets/media/image/logo.png') }}" alt="logo">
-                        </a>
+                            <img class="logo"
+                                src="{{ asset('assets/media/image/vecteezy_attendance-vector-icon-design_16422707.jpg') }}"
+                                alt="logo" style="width: 60px" </a>
                     </div>
                 </div>
 
@@ -93,7 +94,7 @@
                                         <img src="{{ asset('assets/media/image/user/man_avatar3.jpg') }}"
                                             class="rounded-circle" alt="avatar">
                                     </figure>
-                                    <span class="ml-2 d-sm-inline d-none">Bony Gidden</span>
+                                    <span class="ml-2 d-sm-inline d-none">Admin User</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-big">
                                     <div class="text-center py-4">
@@ -101,7 +102,7 @@
                                             <img src="{{ asset('assets/media/image/user/man_avatar3.jpg') }}"
                                                 class="rounded-circle" alt="image">
                                         </figure>
-                                        <h5 class="text-center">Bony Gidden</h5>
+                                        <h5 class="text-center">Admin User</h5>
                                         <div class="mb-3 small text-center text-muted">@bonygidden</div>
                                         <a href="#" class="btn btn-outline-light btn-rounded">Manage Your
                                             Account</a>
@@ -163,7 +164,8 @@
                         </li>
 
                         <li>
-                            <a class="" href=index.html>
+                            <a class="{{ request()->routeIs('attendance') || request()->routeIs('attendance.*') ? 'active' : '' }}"
+                                href={{ route('attendance.index') }}>
                                 <span class="nav-link-icon">
                                     <i data-feather="bar-chart"></i>
                                 </span>
@@ -172,11 +174,12 @@
                         </li>
 
                         <li>
-                            <a class="" href=index.html>
+                            <a class="{{ request()->routeIs('database') || request()->routeIs('database.*') ? 'active' : '' }}"
+                                href={{ route('database.index') }}>
                                 <span class="nav-link-icon">
                                     <i data-feather="database"></i>
                                 </span>
-                                <span>Students' List</span>
+                                <span>Database</span>
                             </a>
                         </li>
 

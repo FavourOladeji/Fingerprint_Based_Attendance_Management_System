@@ -1,20 +1,25 @@
 @extends('admin.layouts.app')
 @push('scripts')
     @include('admin.components.flash')
+    <script src="{{ asset('assets/js/examples/pages/customers.js') }}"></script>
 @endpush('scripts')
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/calendar.css') }}" type="text/css">
+@endsection
 @section('content')
     <div class="page-header d-md-flex justify-content-between">
-        <div>
-            <h3>Welcome back, Bony</h3>
-            <p class="text-muted">This page shows an overview of the attendance of the institution.</p>
+        <div class="">
+
+            <h3>Attendance for CSC 101 (July 20, 2016)</h3>
+
         </div>
 
     </div>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title">Total Students</h6>
@@ -31,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title">Present Today</h6>
@@ -48,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title">Absent Today</h6>
@@ -65,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <h6 class="card-title">Late Today</h6>
@@ -85,54 +90,47 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <div>
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                <div>
-                                    <h5>Stats</h5>
-                                    <div>This Month</div>
-                                </div>
-                                <div>
-                                    <h3 class="text-info mb-0"></h3>
-                                </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                <div>
-                                    <h5>Stats</h5>
-                                    <div>Last Week</div>
-                                </div>
-                                <div>
-                                    <h3 class="text-danger mb-0"></h3>
-                                </div>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                <div>
-                                    <h5>Stats</h5>
-                                    <div>Last month</div>
-                                </div>
-                                <h3 class="text-success mb-0"></h3>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                <div>
-                                    <h5>Stats</h5>
-                                    <div>Last Year</div>
-                                </div>
-                                <div>
-                                    <h3 class="text-primary mb-0"></h3>
-                                </div>
-                            </div>
-                        </div>
+                    <h6 class="card-title">All Administrators</h6>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Avatar</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Matric Number</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Checked In</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <th>
+                                        <figure class="avatar avatar-sm">
+                                            <img src="{{ asset('assets/media/image/user/women_avatar5.jpg') }}"
+                                                class="rounded-circle" alt="image">
+                                        </figure>
+                                    </th>
+                                    <td>Jessie</td>
+                                    <td>Otto</td>
+                                    <td>
+                                        <span class="badge badge-success">Active</span>
+                                    </td>
+                                    <td>
+                                        time
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
-
-{{-- @push('scripts')
-    @include('admin.components.flash')
-@endpush --}}
