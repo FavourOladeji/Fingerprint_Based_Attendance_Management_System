@@ -3,11 +3,13 @@
 use App\Enums\AttendanceStatus;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DatabaseController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Models\Attendance;
 use App\Models\Course;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,5 +63,25 @@ Route::get('attendance/save', function () {
 Route::get('attendance/show/{scheduleId}/{date}', [AttendanceController::class, 'show'])->name('attendance.show');
 Route::post('attendance/filter', [AttendanceController::class, 'filter'])->name('attendance.filter');
 
+Route::get('all_attendance', [AttendanceController::class, 'allAttendance'])->name('all.attendance.index');
+
 Route::get('database', [DatabaseController::class, 'index'])->name('database.index');
+Route::get('database/{user_id}', [DatabaseController::class, 'show'])->name('database.show');
 Route::post('database/store', [DatabaseController::class, 'store'])->name('database.store');
+
+Route::get('device', [DeviceController::class, 'index'])->name('device.index');
+Route::post('device', [DeviceController::class, 'store'])->name('device.store');
+Route::get('device/{device}', [DeviceController::class, 'update'])->name('device.update');
+
+Route::get('fingerprint', [\App\Http\Controllers\FingerprintController::class, 'pendingEnrollment']);
+Route::get('test', function(Request $request)
+{
+    $fingerprintID = $request->fingerprint_id;
+    $user = User::query()->with('attendance')
+        ->whereHas('fingerprint', function ($query) use($fingerprintID) {
+            $query->where('registered_id', $fingerprintID);
+        })
+        ->first();
+    dd($user);
+});
+

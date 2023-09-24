@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DeviceMode;
+use App\Enums\FingerprintStatus;
 use App\Enums\UserType;
 use App\Http\Requests\StoreUserRequest;
+use App\Models\Device;
+use App\Models\Fingerprint;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,11 +18,13 @@ class DatabaseController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::query()->with(['fingerprint'])->get();
+        $devices = Device::all();
         $userTypes = UserType::values();
         return view('admin.database.index', [
             'users' => $users,
-            'userTypes' => $userTypes
+            'userTypes' => $userTypes,
+            'devices' => $devices
         ]);
     }
 
@@ -48,17 +54,33 @@ class DatabaseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $user_id)
     {
-        //
+        $user = User::query()->with(['fingerprint'])->find($user_id);
+        if ($user->fingerprint && $user->fingerprint->status == FingerprintStatus::Added)
+        {
+            toastr('warning', 'You have already added a fingerprint for this device');
+            return redirect(route('database.index'));
+        }
+        $devices = Device::query()->where('mode', DeviceMode::Enrollment)->get();
+        $lastAddedFingerprint = Fingerprint::query()
+            ->where('status', FingerprintStatus::Added)
+            ->latest('updated_at')
+            ->first();
+        $idToBeRegistered = $lastAddedFingerprint ? $lastAddedFingerprint->registered_id + 1 : 1;
+        return view('admin.database.show', [
+            'user' => $user,
+            'devices' => $devices,
+            'idToBeRegistered' => $idToBeRegistered
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $user_id)
     {
-        //
+
     }
 
     /**

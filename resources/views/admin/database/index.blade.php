@@ -59,6 +59,34 @@
                                     </div>
 
                                 </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="userType">Select Device</label>
+                                        <select id="userType" name="user_type" class="form-control">
+                                            @foreach ($devices as $device)
+                                                <option value="{{ $device->uid }}">{{ ucwords($device->name) }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="fingerprint_id">Fingerprint ID</label>
+                                        <input type="number" name="fingerprint_id" class="form-control" id="fingerprint_id"
+                                            placeholder="">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <label for="">Place your Finger on the device</label>
+                                    <span style="width: 100%; height: 50%; font-size: 14px"
+                                        class="alert alert-danger text-center">Fingerprint
+                                        is not Added</span>
+                                </div>
+
+
+
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -87,7 +115,8 @@
                                 <th scope="col">Avatar</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Matric Number</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">UserType</th>
+                                <th scope="col">Fingerprint</th>
                                 <th scope="col">Date Created</th>
                             </tr>
                         </thead>
@@ -112,6 +141,14 @@
                                     <td>
                                         <span
                                             class="badge badge-{{ $user->user_type_colour_code }}">{{ ucwords($user->user_type->value) }}</span>
+                                    </td>
+                                    <td>
+                                        @if($user->fingerprint?->status == \App\Enums\FingerprintStatus::Added )
+                                            <a disabled class="btn btn-success">Enrolled</a>
+                                        @else
+                                            <a class="btn btn-info" href="{{route('database.show', ['user_id' => $user->id])}}">Enroll</a>
+                                        @endif
+
                                     </td>
                                     <td>{{ Carbon\Carbon::parse($user->created_at)->diffForHumans() }}</td>
                                 </tr>

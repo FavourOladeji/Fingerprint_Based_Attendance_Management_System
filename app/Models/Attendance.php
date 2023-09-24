@@ -14,7 +14,9 @@ class Attendance extends Model
     protected $fillable = [
         'user_id',
         'schedule_id',
-        'status'
+        'status',
+        'has_checked_out',
+        'timeout',
     ];
 
     protected $appends = [

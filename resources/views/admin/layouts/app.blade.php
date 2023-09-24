@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Gogi - Admin and Dashboard Template</title>
+    <title>Attendance Management System</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/media/image/favicon.png') }}" />
+    <link rel="shortcut icon"
+        href="{{ asset('assets/media/image/vecteezy_attendance-vector-icon-design_16422707.jpg') }}" />
 
     <!-- Main css -->
     <link rel="stylesheet" href="{{ asset('vendors/bundle.css') }}" type="text/css">
@@ -174,6 +175,16 @@
                         </li>
 
                         <li>
+                            <a class="{{ request()->routeIs('all.attendance') || request()->routeIs('all.attendance.*') ? 'active' : '' }}"
+                               href={{ route('all.attendance.index') }}>
+                                <span class="nav-link-icon">
+                                    <i data-feather="bar-chart"></i>
+                                </span>
+                                <span>All Attendance</span>
+                            </a>
+                        </li>
+
+                        <li>
                             <a class="{{ request()->routeIs('database') || request()->routeIs('database.*') ? 'active' : '' }}"
                                 href={{ route('database.index') }}>
                                 <span class="nav-link-icon">
@@ -184,11 +195,12 @@
                         </li>
 
                         <li>
-                            <a class="" href=index.html>
+                            <a class="{{ request()->routeIs('device') || request()->routeIs('device.*') ? 'active' : '' }}"
+                                href="{{ route('device.index') }}">
                                 <span class="nav-link-icon">
-                                    <i data-feather="book-open"></i>
+                                    <i data-feather="hard-drive"></i>
                                 </span>
-                                <span>Report</span>
+                                <span>Devices</span>
                             </a>
                         </li>
                     </ul>

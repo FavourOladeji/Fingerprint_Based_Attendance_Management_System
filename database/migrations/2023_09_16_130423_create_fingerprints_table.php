@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('fingerprints', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('schedule_id')->nullable()->constrained('schedules')->nullOnDelete();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('status');
-            $table->boolean('has_checked_out')->default(false);
-            $table->dateTime('timeout')->nullable();
+            $table->foreignId('device_id')->constrained('devices');
+            $table->integer('registered_id')->nullable()->unique();
+            $table->integer('id_to_be_registered')->nullable();
+            $table->string('status')->default(\App\Enums\FingerprintStatus::Pending->value);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('fingerprints');
     }
 };

@@ -73,4 +73,14 @@ class User extends Authenticatable
             }
         );
     }
+
+    public function fingerprint()
+    {
+        return $this->hasOne(Fingerprint::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

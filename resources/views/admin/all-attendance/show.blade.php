@@ -2,36 +2,31 @@
 @push('scripts')
     @include('admin.components.flash')
     <script>
-        console.log('here');
         // Function to update the table with new data
         function updateTable() {
-            let schedule_id = {{$scheduleId}};
-            let date = "{{$date}}";
             $.ajax({
-                url: '{{route('get.attendance.schedule.data')}}' + '?schedule_id='+ schedule_id + '&date=' + date , // Replace with your server-side script URL
+                url: '{{route('get.attendance.data')}}', // Replace with your server-side script URL
                 method: 'GET',
                 dataType: 'json',
                 success: function (data) {
                     // Clear the existing table rows
                     console.log(data);
-                    // console.log('Number of rows to insert:', data.attendances.length);
+                    console.log('Number of rows to insert:', data.attendances.length);
 
                     $('#dynamicTable tbody').empty();
-                    console.log('totalStudents ' + data.totalStudents);
-
-                    $('#totalStudents').text(data.totalStudents);
-                    $('#studentsPresentToday').text(data.studentsPresentToday);
-                    $('#studentsAbsentToday').text(data.studentsAbsentToday);
-                    $('#studentsLateToday').text(data.studentsLateToday);
+                    var count;
                     // Iterate through the data and add rows to the table
+                    $('#totalUsers').text(data.totalUsers);
+                    $('#usersPresentToday').text(data.usersPresentToday);
+                    $('#usersAbsentToday').text(data.usersAbsentToday);
+                    $('#usersLateToday').text(data.usersLateToday);
                     $.each(data.attendances, function (index, attendance) {
                         console.log('here');
+                        count += 1;
                         let newRow = $('<tr>');
                         newRow.append($('<th>').text(index + 1)); // Count
                         newRow.append($('<th>').html('<figure class="avatar avatar-sm"><img src="{{ asset('assets/media/image/user/women_avatar5.jpg') }}" class="rounded-circle" alt="image"></figure>')); // Avatar
                         newRow.append($('<td>').text(attendance.user.name)); // Name
-                        newRow.append($('<td>').text(attendance.user.matric_number)); // Name
-                        // newRow.append($('<td>').html('<span class="badge badge-" + attendance.status_colour_code + "></span>'); // Name
                         newRow.append($('<td>').text(attendance.created_at)); // Created At
                         newRow.append($('<td>').text(attendance.timeout)); // Created At
 
@@ -59,7 +54,7 @@
     <div class="page-header d-md-flex justify-content-between">
         <div class="">
 
-            <h3>Attendance for {{ $courseCode }} ({{ Carbon\Carbon::parse($date)->format('M d, Y') }})</h3>
+            <h3>Attendance for {{ Carbon\Carbon::parse($date)->format('M d, Y') }}</h3>
 
         </div>
 
@@ -71,7 +66,7 @@
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="card-title">Total Students</h6>
+                            <h6 class="card-title">Total Users</h6>
                             <div class="d-flex align-items-center mb-3">
                                 <div>
                                     <div class="avatar">
@@ -80,7 +75,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="totalStudents"></div>
+                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="totalUsers"></div>
                             </div>
                         </div>
                     </div>
@@ -97,7 +92,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="studentsPresentToday"></div>
+                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="usersPresentToday"></div>
                             </div>
                         </div>
                     </div>
@@ -114,7 +109,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="studentsLateToday"></div>
+                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="usersLateToday"></div>
                             </div>
 
                         </div>
@@ -132,7 +127,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="studentsAbsentToday"></div>
+                                <div class="font-weight-bold ml-1 font-size-30 ml-3" id="usersAbsentToday"></div>
                             </div>
                         </div>
                     </div>
@@ -153,8 +148,6 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Avatar</th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Matric Number</th>
-{{--                                    <th scope="col">Status</th>--}}
                                     <th scope="col">Checked In</th>
                                     <th scope="col">Time Out</th>
                                 </tr>

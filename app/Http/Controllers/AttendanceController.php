@@ -64,24 +64,12 @@ class AttendanceController extends Controller
      */
     public function show($scheduleId, $date)
     {
-        $totalStudents = User::query()->where('user_type', UserType::Student->value)->count();
-        $attendances = Attendance::query()->with(['user', 'schedule.course'])->where('schedule_id', $scheduleId)->whereDate('created_at', $date)->get();
-        $studentsPresentToday = Attendance::query()->where('schedule_id', $scheduleId)->whereDate('created_at', $date)->where('status', AttendanceStatus::Present->value)->count();
-        $studentsLateToday = Attendance::query()->where('schedule_id', $scheduleId)->whereDate('created_at', $date)->where('status', AttendanceStatus::Late->value)->count();
-        $studentsAbsentToday = $totalStudents - ($studentsPresentToday + $studentsLateToday);
-        $courseCode = $attendances[0]->schedule->course->code;
-        // dd($studentsAbsent);
-        // dd($attendances);
-        // $studentsPresentToday = $attendances->where('status', '=',  'present');
-        // dd($studentsPresentToday);
+        $date = strval($date);
+        $courseCode = Schedule::query()->with('course')->find($scheduleId)->course->code;
         return view('admin.attendance.show', [
-            'attendances' => $attendances,
-            'totalStudents' => $totalStudents,
-            'studentsPresentToday' => $studentsPresentToday,
-            'studentsLateToday' => $studentsLateToday,
-            'studentsAbsentToday' => $studentsAbsentToday,
             'courseCode' => $courseCode,
             'date' => $date,
+            'scheduleId' => $scheduleId
         ]);
     }
 
@@ -122,5 +110,62 @@ class AttendanceController extends Controller
             ];
         }
         return $timeframes;
+    }
+
+    public function allAttendance(Request $request)
+    {
+
+        return view('admin.all-attendance.show', [
+            'date' => now()
+        ]);
+    }
+
+    public function getAllAttendanceData(Request $request)
+    {
+        $date = $request->date ?? now();
+        $totalUsers = User::query()->count();
+        $attendances = Attendance::query()->with(['user'])->whereDate('created_at', $date)->latest('updated_at')->get();
+//        dd($attendances);
+        $usersPresentToday = User::query()->whereHas('attendances', function ($query) use ($date) {
+            $query->whereDate('created_at', $date)->where('status', AttendanceStatus::Present);
+        })->count();
+        $usersLateToday = User::query()->whereHas('attendances', function ($query) use ($date) {
+            $query->whereDate('created_at', $date)->where('status', AttendanceStatus::Late);
+        })->count();
+        $usersAbsentToday = $totalUsers - ($usersPresentToday + $usersLateToday);
+
+        return response()->json([
+            'attendances' => $attendances,
+            'totalUsers' => $totalUsers,
+            'usersPresentToday' => $usersPresentToday,
+            'usersLateToday' => $usersLateToday,
+            'usersAbsentToday' => $usersAbsentToday,
+        ]);
+    }
+
+    public function getAllAttendanceForSchedule(Request $request)
+    {
+        $date = $request->date;
+        $scheduleId = $request->schedule_id;
+        $totalStudents = User::query()->where('user_type', UserType::Student->value)->count();
+        $attendances = Attendance::query()->with(['user', 'schedule.course'])->where('schedule_id', $scheduleId)->whereDate('created_at', $date)->latest('updated_at')->get();
+        $studentsPresentToday = Attendance::query()->where('schedule_id', $scheduleId)->whereDate('created_at', $date)->where('status', AttendanceStatus::Present->value)->count();
+        $studentsLateToday = Attendance::query()->where('schedule_id', $scheduleId)->whereDate('created_at', $date)->where('status', AttendanceStatus::Late->value)->count();
+        $studentsAbsentToday = $totalStudents - ($studentsPresentToday + $studentsLateToday);
+        $courseCode = Schedule::query()->with('course')->find($scheduleId)->course->code;
+//        dd($courseCode);
+        // dd($studentsAbsent);
+        // dd($attendances);
+        // $studentsPresentToday = $attendances->where('status', '=',  'present');
+        // dd($studentsPresentToday);
+        return response()->json([
+            'attendances' => $attendances,
+            'totalStudents' => $totalStudents,
+            'studentsPresentToday' => $studentsPresentToday,
+            'studentsLateToday' => $studentsLateToday,
+            'studentsAbsentToday' => $studentsAbsentToday,
+            'courseCode' => $courseCode,
+            'date' => $date,
+        ]);
     }
 }
